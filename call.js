@@ -32,7 +32,7 @@ function call_slack(text) {
 }
 
 function delegate_call_slack(text) {
-  new Promise(resolje => {
+  new Promise(resolve => {
     call_slack(text);
     resolve();
   })
