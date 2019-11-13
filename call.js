@@ -13,6 +13,7 @@ function call_slack(text) {
     var str_time = format.format(new Date());
     var channel = $('#channel').val();
     var msg = '[' + str_time + '] ' + text;
+    console.log('msg', msg);
     $.ajax({
         data: 'payload=' + JSON.stringify({
             text: msg,
@@ -30,54 +31,28 @@ function call_slack(text) {
     });
 }
 
+function delegate_call_slack(text) {
+  new Promise(resolve => {
+    call_slack(text);
+    resolve();
+  })
+}
+
 function record() {
     window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
     recognition = new webkitSpeechRecognition();
     var str_lang = $('input:radio[name="radio2"]:checked').val();
     recognition.lang = str_lang;
-    recognition.interimResults = true;
+    recognition.interimResults = false;
     recognition.continuous = true;
-    save_input_to_cookie()
-
-    recognition.onsoundstart = function() {
-        $("#status").val("Recording");
-    };
-    
-    recognition.onnomatch = function() {
-        $("#status").val("Retry");
-    };
-    
-    recognition.onerror = function(event) {
-        $("#status").val(event.error);
-        if (flag_speech == 0) { record(); }
-    };
-    
-    recognition.onsoundend = function() {
-        $("#status").val("Stopped");
-        recognition.stop();
-        record();
-    };
+    // save_input_to_cookie()
 
     recognition.onresult = function(event) {
-        var results = event.results;
-        for (var i = event.resultIndex; i < results.length; i++) {
-            if (results[i].isFinal) {
-                var text = results[i][0].transcript;
-                $("#result_text").val(text);
-                call_slack(text);
-                recognition.stop();
-                record();
-            }
-            else {
-                var text = results[i][0].transcript;
-                $("#result_text").val(text);
-                flag_speech = 1;
-            }
-        }
+      recognition.stop();
+      record();
+      delegate_call_slack(event.results[0][0].transcript);
     }
-    
-    $("#result_text").val('START');
-    flag_speech = 0;
+
     recognition.start();
 }
 
@@ -144,7 +119,7 @@ $(function () {
     $('#record').on('click', function () {
         toggle_recording();
     });
-    
+
     $(document).ready(function() {
         restore_input_from_cookie();
     });
