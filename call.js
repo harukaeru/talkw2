@@ -40,6 +40,8 @@ function delegate_call_slack(text) {
 
 window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
 
+console.log('ver1');
+
 function record() {
     recognition = new SpeechRecognition();
     recognition.lang = 'ja_JP';
@@ -47,20 +49,17 @@ function record() {
     recognition.continuous = true;
 
     recognition.onerror = function(event) {
-        record();
-        console.log('error', event);
+      console.log('error', event);
     };
 
     recognition.onsoundend = function() {
-      recognition.stop();
-      record();
       console.log('soundend');
     };
 
     recognition.onresult = function(event) {
       const results = event.results;
       delegate_call_slack(results[0][0].transcript);
-      recognition.stop();
+      recognition.abort();
       record();
     }
 
