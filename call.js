@@ -52,6 +52,11 @@ function record() {
       console.log('end');
     }
 
+    recognition.onerror = function(event) {
+        record();
+        console.log('error');
+    };
+
     recognition.onsoundend = function() {
       recognition.stop();
       record();
