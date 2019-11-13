@@ -46,11 +46,18 @@ function record() {
     recognition.interimResults = false;
     recognition.continuous = true;
 
+    recognition.onend = function() {
+      recognition.stop();
+      record();
+      console.log('end');
+    }
+
     recognition.onsoundend = function() {
       recognition.stop();
       record();
       console.log('soundend');
     };
+
     recognition.onresult = function(event) {
       const results = event.results;
       delegate_call_slack(results[0][0].transcript);
