@@ -32,7 +32,7 @@ function call_slack(text) {
 }
 
 function delegate_call_slack(text) {
-  new Promise(resolve => {
+  new Promise(resolje => {
     call_slack(text);
     resolve();
   })
@@ -40,7 +40,7 @@ function delegate_call_slack(text) {
 
 window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
 
-console.log('ver1');
+console.log('ver2');
 
 function record() {
     recognition = new SpeechRecognition();
