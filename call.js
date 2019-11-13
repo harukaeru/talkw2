@@ -47,10 +47,15 @@ function record() {
     recognition.continuous = true;
     // save_input_to_cookie()
 
-    recognition.onresult = function(event) {
+    recognition.onsoundend = function() {
       recognition.stop();
       record();
-      delegate_call_slack(event.results[0][0].transcript);
+    };
+    recognition.onresult = function(event) {
+      const results = event.results;
+      recognition.stop();
+      record();
+      delegate_call_slack(results[0][0].transcript);
     }
 
     recognition.start();
