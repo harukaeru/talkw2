@@ -46,9 +46,9 @@ function record() {
     recognition.interimResults = false;
     recognition.continuous = true;
 
-    recognition.onerror = function() {
+    recognition.onerror = function(event) {
         record();
-        console.log('error');
+        console.log('error', event);
     };
 
     recognition.onsoundend = function() {
