@@ -40,7 +40,7 @@ function delegate_call_slack(text) {
 
 window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
 
-console.log('ver2');
+console.log('ver3');
 
 function record() {
     recognition = new SpeechRecognition();
@@ -49,6 +49,7 @@ function record() {
     recognition.continuous = true;
 
     recognition.onerror = function(event) {
+      record();
       console.log('error', event);
     };
 
