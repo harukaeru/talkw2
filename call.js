@@ -38,24 +38,24 @@ function delegate_call_slack(text) {
   })
 }
 
+window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+
 function record() {
-    window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
     recognition = new webkitSpeechRecognition();
-    var str_lang = $('input:radio[name="radio2"]:checked').val();
-    recognition.lang = str_lang;
+    recognition.lang = 'ja_JP';
     recognition.interimResults = false;
     recognition.continuous = true;
-    // save_input_to_cookie()
 
     recognition.onsoundend = function() {
       recognition.stop();
       record();
+      console.log('soundend');
     };
     recognition.onresult = function(event) {
       const results = event.results;
+      delegate_call_slack(results[0][0].transcript);
       recognition.stop();
       record();
-      delegate_call_slack(results[0][0].transcript);
     }
 
     recognition.start();
@@ -122,7 +122,8 @@ function save_input_to_cookie()
 
 $(function () {
     $('#record').on('click', function () {
-        toggle_recording();
+      save_input_to_cookie();
+      toggle_recording();
     });
 
     $(document).ready(function() {
