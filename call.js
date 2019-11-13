@@ -53,13 +53,13 @@ function record() {
     };
 
     recognition.onsoundend = function() {
+      record();
       console.log('soundend');
     };
 
     recognition.onresult = function(event) {
       const results = event.results;
       delegate_call_slack(results[0][0].transcript);
-      recognition.abort();
       record();
     }
 
