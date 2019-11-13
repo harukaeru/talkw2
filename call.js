@@ -41,18 +41,12 @@ function delegate_call_slack(text) {
 window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
 
 function record() {
-    recognition = new webkitSpeechRecognition();
+    recognition = new SpeechRecognition();
     recognition.lang = 'ja_JP';
     recognition.interimResults = false;
     recognition.continuous = true;
 
-    recognition.onend = function() {
-      recognition.stop();
-      record();
-      console.log('end');
-    }
-
-    recognition.onerror = function(event) {
+    recognition.onerror = function() {
         record();
         console.log('error');
     };
